@@ -1,12 +1,12 @@
 const colors = [
-    [50, 205, 50],     // Lime Green
-    [46, 139, 87],     // Sea Green
-    [0, 255, 127],     // Spring Green
-    [152, 255, 152],   // Mint Green
-    [107, 142, 35]     // Olive Drab
+  [50, 205, 50],     // Lime Green
+  [46, 139, 87],     // Sea Green
+  [0, 255, 127],     // Spring Green
+  [152, 255, 152],   // Mint Green
+  [107, 142, 35]     // Olive Drab
 ];
 
-let resolution = 5;  // Initialize resolution
+let resolution = 5;  // Initialize resolution for display
 let capturer;
 let isRecording = false;
 let duration = 10; // Length of the video in seconds
@@ -16,8 +16,14 @@ let hueOffset = 0;
 let animationRunning = false;
 let firstFrameRendered = false;
 
+// Create a graphics buffer for high-resolution rendering
+let highResBuffer;
+const highResWidth = 1920;
+const highResHeight = 1080;
+
 function setup() {
   createCanvas(640, 480);
+  highResBuffer = createGraphics(highResWidth, highResHeight); // High-resolution buffer
   frameRate(frameRateValue); // Control the speed of animation
   noiseDetail(8, 0.65);  // Adjust the noise parameters
   capturer = new CCapture({ format: 'webm', framerate: frameRateValue }); // Change format to 'webm'
@@ -51,7 +57,8 @@ function draw() {
     noLoop();
   } else {
     if (isRecording && frameCount <= frameCountLimit) {
-      capturer.capture(canvas);
+      generatePixelArt(true); // Render to high-resolution buffer when recording
+      capturer.capture(highResBuffer.canvas);
       console.log("Recording frame:", frameCount);
       updateProgressDisplay();
     } else if (isRecording && frameCount > frameCountLimit) {
@@ -62,7 +69,6 @@ function draw() {
       console.log("Recording stopped and saved.");
     }
 
-    animateColors();
     generatePixelArt();
   }
 }
@@ -79,14 +85,22 @@ function startAnimation() {
   }
 }
 
-function generatePixelArt() {
-  for (let y = 0; y < height; y += resolution) { // Corrected for loop syntax
-    for (let x = 0; x < width; x += resolution) { // Corrected variable to `x` from `y`
+function generatePixelArt(highRes = false) {
+  const target = highRes ? highResBuffer : this;
+
+  target.clear();
+
+  for (let y = 0; y < target.height; y += resolution) { // Corrected for loop syntax
+    for (let x = 0; x < target.width; x += resolution) { // Corrected variable to `x` from `y`
       const n = noise(x * 0.1, y * 0.1) * colors.length;
       const c = colors[int(n) % colors.length];  // Ensure index is within bounds
-      fill(c[0], c[1], c[2], random(255)); // Adding alpha for transparency
-      rect(x, y, resolution, resolution);
+      target.fill(c[0], c[1], c[2], random(255)); // Adding alpha for transparency
+      target.rect(x, y, resolution, resolution);
     }
+  }
+  
+  if (!highRes) {
+    image(highResBuffer, 0, 0, width, height); // Scale down high-res buffer for display
   }
 }
 
