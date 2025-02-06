@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Generative Pixel Art</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+  <script src="ccapture/build/CCapture.all.min.js"></script> <!-- Local CCapture library from the ccapture folder -->
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #1c1c1c;
+      color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+    }
+    header {
+      background-color: #333;
+      color: #4CAF50;
+      padding: 10px 0;
+      font-size: 24px;
+      width: 100%;
+      text-align: center;
+    }
+    main {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      margin-top: 20px;
+      width: 100%;
+      flex-grow: 1;
+    }
+    #controls {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 20px;
+      background-color: #333;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      max-width: 220px;
+    }
+    .control-section {
+      display: grid;
+      gap: 10px;
+      background-color: #444; /* Different background color */
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #555; /* Border for visual separation */
+    }
+    .canvas-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-left: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button.active {
+      background-color: #AF4CAB; /* Active button color */
+    }
+    button:hover {
+      background-color: #AF4CAB; /* Hover button color */
+    }
+    input[type="color"] {
+      padding: 5px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #colorControls {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    #progressDisplay {
+      color: #4CAF50;
+      font-size: 16px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>Generative Pixel Art</header>
+  <main>
+    <div id="controls">
+      <div class="control-section">
+        <button id="startAnimationBtn">Start Animation</button>
+        <button id="recordBtn">Start Recording</button>
+        <div id="progressDisplay">Frames: 0 / 240 (0%)</div>
+        <button id="saveBtn">Save Artwork</button>
+      </div>
+      <div class="control-section">
+        <button id="randomizeColorsBtn">Randomize Colors</button>
+        <button id="animateColorsBtn">Animate Colors</button>
+        <div id="colorControls">
+          <input type="color" id="color1" value="#32CD32">
+          <input type="color" id="color2" value="#2E8B57">
+          <input type="color" id="color3" value="#00FF7F">
+          <input type="color" id="color4" value="#98FF98">
+          <input type="color" id="color5" value="#6B8E23">
+        </div>
+        <button id="setCustomColorsBtn">Set Custom Colors</button>
+      </div>
+    </div>
+    <div class="canvas-container">
+      <script src="sketch.js"></script>
+    </div>
+  </main>
+</body>
+</html>
